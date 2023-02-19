@@ -29,7 +29,7 @@ class PositionalEncoding(nn.Module):
         pe[:, 0::2] = torch.sin(position * div_term)  # [max_len, d_model/2]
         pe[:, 1::2] = torch.cos(position * div_term)
         pe = pe.unsqueeze(0).transpose(0, 1)  # [max_len, 1, d_model]
-        self.register_buffer('pe', pe)
+        self.register_buffer('pe', pe)  # buffer: not updated during training, and but saved alongside parameters
 
     def forward(self, x):  # [x_len, batch_size, d_model]
         """
@@ -43,8 +43,11 @@ class PositionalEncoding(nn.Module):
 class TokenEmbedding(nn.Module):
     def __init__(self, vocab_size: int, emb_size):
         super(TokenEmbedding, self).__init__()
-        self.embedding = nn.Embedding(vocab_size, emb_size)
+        self.embedding = nn.Embedding(vocab_size, emb_size) 
         self.emb_size = emb_size
+        #A simple lookup table that stores embeddings of a fixed dictionary and size.
+        #the learnable weights of the module of shape (num_embeddings, embedding_dim), initialized by N(0,1).
+
 
     """
         :param tokens: shape : [len, batch_size]
