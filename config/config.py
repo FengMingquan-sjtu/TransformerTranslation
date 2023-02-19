@@ -31,7 +31,8 @@ class Config():
         self.beta1 = 0.9
         self.beta2 = 0.98
         self.epsilon = 10e-9
-        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        #self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device('cpu')
         self.epochs = 10
         self.model_save_dir = os.path.join(self.project_dir, 'cache')
         if not os.path.exists(self.model_save_dir):

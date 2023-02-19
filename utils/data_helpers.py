@@ -1,6 +1,6 @@
 import logging
 from collections import Counter
-from torchtext.vocab import Vocab
+from torchtext.vocab import vocab
 import torch
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
@@ -17,7 +17,7 @@ def my_tokenizer():
 
 def build_vocab(tokenizer, filepath, min_freq=1, specials=None):
     """
-    vocab = Vocab(counter, specials=specials)
+    vocab = vocab(counter, specials=specials)
 
     print(vocab.itos)  # 得到一个列表，返回词表中的每一个词；
     # ['<unk>', '<pad>', '<bos>', '<eos>', '.', 'a', 'are', 'A', 'Two', 'in', 'men',...]
@@ -33,7 +33,9 @@ def build_vocab(tokenizer, filepath, min_freq=1, specials=None):
     with open(filepath, encoding='utf8') as f:
         for string_ in f:
             counter.update(tokenizer(string_))
-    return Vocab(counter, specials=specials, min_freq=min_freq)
+    v = vocab(counter, specials=specials, min_freq=min_freq)
+    v.set_default_index(v['<unk>'])
+    return v
 
 
 class LoadEnglishGermanDataset():
